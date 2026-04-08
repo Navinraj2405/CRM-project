@@ -32,7 +32,7 @@ const EditLeadModal = ({ isOpen, onClose, onLeadUpdated, lead }) => {
     setError(null);
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      await axios.put(`http://localhost:5000/api/leads/${lead._id}`, formData, config);
+      await axios.put(`https://crm-project-roan.vercel.app/api/leads/${lead._id}`, formData, config);
       onLeadUpdated(); // trigger refresh
       onClose(); // close modal
     } catch (err) {

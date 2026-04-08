@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (email, password) => {
-        const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+        const response = await axios.post('https://crm-project-roan.vercel.app/api/auth/login', { email, password });
         if (response.data) {
             localStorage.setItem('user', JSON.stringify(response.data));
             setUser(response.data);

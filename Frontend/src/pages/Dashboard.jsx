@@ -13,7 +13,7 @@ const Dashboard = () => {
     const fetchReports = async () => {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const res = await axios.get('http://localhost:5000/api/reports', config);
+        const res = await axios.get('https://crm-project-roan.vercel.app/api/reports', config);
         setData(res.data);
       } catch (error) {
         console.error("Failed to fetch reports", error);

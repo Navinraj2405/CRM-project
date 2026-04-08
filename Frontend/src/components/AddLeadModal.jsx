@@ -23,7 +23,7 @@ const AddLeadModal = ({ isOpen, onClose, onLeadAdded }) => {
       const fetchUsers = async () => {
         try {
           const config = { headers: { Authorization: `Bearer ${user.token}` } };
-          const res = await axios.get('http://localhost:5000/api/users', config);
+          const res = await axios.get('https://crm-project-roan.vercel.app/api/users', config);
           setUsers(res.data.filter(u => u.role === 'Executive'));
         } catch (err) {
           console.error("Failed to fetch users for assign", err);
@@ -59,7 +59,7 @@ const AddLeadModal = ({ isOpen, onClose, onLeadAdded }) => {
           delete submitData.assignedTo;
       }
 
-      await axios.post('http://localhost:5000/api/leads', submitData, config);
+      await axios.post('https://crm-project-roan.vercel.app/api/leads', submitData, config);
       onLeadAdded(); // trigger refresh
       onClose(); // close modal
     } catch (err) {

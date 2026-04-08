@@ -11,7 +11,7 @@ const Users = () => {
     const fetchUsers = async () => {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const res = await axios.get('http://localhost:5000/api/users', config);
+        const res = await axios.get('https://crm-project-roan.vercel.app/api/users', config);
         setUsers(res.data);
       } catch (error) {
         console.error(error);

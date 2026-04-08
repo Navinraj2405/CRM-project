@@ -23,7 +23,7 @@ const Leads = () => {
   const fetchLeads = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const res = await axios.get(`http://localhost:5000/api/leads?search=${search}`, config);
+      const res = await axios.get(`https://crm-project-roan.vercel.app/api/leads?search=${search}`, config);
       setLeads(res.data);
     } catch (error) {
       console.error(error);
@@ -34,7 +34,7 @@ const Leads = () => {
 
   const handleConvertPayment = async (lead) => {
     try {
-      const response = await fetch('http://localhost:5000/api/payment/create-order', {
+      const response = await fetch('https://crm-project-roan.vercel.app/api/payment/create-order', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ const Leads = () => {
 
       await cashfree.checkout({
         paymentSessionId: data.payment_session_id,
-        returnUrl: "http://localhost:5173/leads?payment=success",
+        returnUrl: `${window.location.origin}/leads?payment=success`,
         redirectTarget: "_self",
       });
 

@@ -18,7 +18,7 @@ const Register = () => {
     setError(null);
     try {
       // Register user
-      const res = await axios.post('http://localhost:5000/api/auth/register', formData);
+      const res = await axios.post('https://crm-project-roan.vercel.app/api/auth/register', formData);
       
       // Auto login after successful registration using the token returned
       if (res.data.token) {
