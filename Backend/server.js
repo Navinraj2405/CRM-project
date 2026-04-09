@@ -21,7 +21,9 @@ app.use(express.json({
 
 // Enable CORS
 app.use(cors({
-    origin: ['https://crm-project-frontend-xi.vercel.app', 'http://localhost:5173'],
+    origin: function (origin, callback) {
+        callback(null, origin || '*'); // Dynamically allow all origins (including Vercel preview environments)
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'x-api-version']
