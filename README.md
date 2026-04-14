@@ -124,7 +124,7 @@ CASHFREE_SECRET_KEY=your_secret_key
 ## 🚀 Deployment
 
 - Frontend: Vercel  
-- Backend: Render  
+- Backend: Vercel  
 - Database: MongoDB Atlas  
 
 ---
