@@ -12,6 +12,32 @@ connectDB();
 
 const app = express();
 
+const allowedOrigins = new Set([
+    'https://crm-project-frontend-xi.vercel.app',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173'
+]);
+
+// Handle CORS and browser preflight requests before parsing or mounting routes
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+
+    if (origin && (allowedOrigins.has(origin) || origin.endsWith('.vercel.app'))) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+        res.setHeader('Vary', 'Origin');
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
+    }
+
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization,x-api-version');
+
+    if (req.method === 'OPTIONS') {
+        return res.status(204).end();
+    }
+
+    next();
+});
+
 // Body parser with rawBody included for webhook signature verification
 app.use(express.json({
     verify: (req, res, buf) => {
@@ -19,13 +45,17 @@ app.use(express.json({
     }
 }));
 
-// Enable CORS
+// Enable CORS for Express responses and keep the allowlist consistent
 app.use(cors({
-    origin: function (origin, callback) {
-        callback(null, origin || '*'); // Dynamically allow all origins (including Vercel preview environments)
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.has(origin) || origin.endsWith('.vercel.app')) {
+            callback(null, origin || 'https://crm-project-frontend-xi.vercel.app');
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
     },
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'x-api-version']
 }));
 
