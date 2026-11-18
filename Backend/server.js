@@ -15,14 +15,20 @@ const app = express();
 const allowedOrigins = new Set([
     'https://crm-project-frontend-xi.vercel.app',
     'http://localhost:5173',
-    'http://127.0.0.1:5173'
-]);
+    'http://127.0.0.1:5173',
+    process.env.FRONTEND_URL
+].filter(Boolean));
+
+const isAllowedOrigin = (origin) => Boolean(origin) && (
+    allowedOrigins.has(origin) ||
+    /^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin)
+);
 
 // Handle CORS and browser preflight requests before parsing or mounting routes
 app.use((req, res, next) => {
     const origin = req.headers.origin;
 
-    if (origin && (allowedOrigins.has(origin) || origin.endsWith('.vercel.app'))) {
+    if (isAllowedOrigin(origin)) {
         res.setHeader('Access-Control-Allow-Origin', origin);
         res.setHeader('Vary', 'Origin');
         res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -48,7 +54,7 @@ app.use(express.json({
 // Enable CORS for Express responses and keep the allowlist consistent
 app.use(cors({
     origin: (origin, callback) => {
-        if (!origin || allowedOrigins.has(origin) || origin.endsWith('.vercel.app')) {
+        if (!origin || isAllowedOrigin(origin)) {
             callback(null, origin || 'https://crm-project-frontend-xi.vercel.app');
         } else {
             callback(new Error('Not allowed by CORS'));
@@ -63,6 +69,11 @@ app.use(cors({
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
+
+// Health check for deployment monitoring
+app.get('/api/health', (req, res) => {
+    res.status(200).json({ status: 'ok' });
+});
 
 // Mount routers
 app.use('/api/auth', require('./routes/authRoutes'));
